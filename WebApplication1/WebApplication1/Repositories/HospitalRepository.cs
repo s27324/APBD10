@@ -107,5 +107,46 @@ public class HospitalRepository : IHospitalRepository
         return 0;
     }
 
-    
+    public async Task<GetClientDTO> GetClient(int id)
+    {
+        if (!await _hospitalDbContext.Patients.AnyAsync(e => e.IdPatient == id))
+        {
+            return new GetClientDTO();
+        }
+        var tmp = await _hospitalDbContext.Patients
+            .Include(p => p.Prescriptions)
+                .ThenInclude(pr => pr.Doctor)
+            .Include(p => p.Prescriptions)
+                .ThenInclude(pr => pr.PrescriptionMedicaments)
+                .ThenInclude(pm => pm.Medicament)
+            .FirstOrDefaultAsync(p => p.IdPatient == id);
+        return new GetClientDTO
+        {
+            IdPatient = id,
+            FirstName = tmp.FirstName,
+            LastName = tmp.LastName,
+            Birthdate = tmp.Birthdate,
+            Prescriptions = tmp.Prescriptions
+                .OrderBy(e => e.DueDate)
+                .Select(e => new GetClientPrescriptionsDTO
+                {
+                    IdPrescription = e.IdPrescription,
+                    Date = e.Date,
+                    DueDate = e.DueDate,
+                    Medicaments = e.PrescriptionMedicaments.Select(ee => new GetClientMedicaments
+                    {
+                        IdMedicament = ee.Medicament.IdMedicament,
+                        Name = ee.Medicament.Name,
+                        Description = ee.Medicament.Description,
+                        Dose = ee.Dose
+                    }).ToList(),
+                    Doctor = new GetClientDoctor
+                    {
+                        IdDoctor = e.Doctor.IdDoctor,
+                        FirstName = e.Doctor.FirstName
+                    }
+                }).ToList()
+        };
+
+    }
 }

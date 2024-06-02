@@ -5,4 +5,5 @@ namespace WebApplication1.Services;
 public interface IHospitalService
 {
     public Task<string> AddNewPrescriptionAsync(CancellationToken cancellationToken, PrescriptionDTO prescriptionDto);
+    public Task<GetClientDTO> GetClient(int id);
 }

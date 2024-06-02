@@ -27,4 +27,10 @@ public class HospitalController : ControllerBase
 
         return Ok(message);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetClient(int id)
+    {
+        return Ok(await _hospitalService.GetClient(id));
+    }
 }

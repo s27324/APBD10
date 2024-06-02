@@ -31,4 +31,9 @@ public class HospitalService : IHospitalService
         }
         
     }
+
+    public Task<GetClientDTO> GetClient(int id)
+    {
+        return _hospitalRepository.GetClient(id);
+    }
 }

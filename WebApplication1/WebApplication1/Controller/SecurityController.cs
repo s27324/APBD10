@@ -30,6 +30,10 @@ public class SecurityController : ControllerBase
     [HttpPost("register")]
     public IActionResult RegisterUser(RegisterRequest model)
     {
+        if (_hospitalDbContext.Users.Any(x => x.Login == model.Login && x.Email == model.Email))
+        {
+            return BadRequest($"User {model.Login} is already registered.");
+        }
         var hashedPasswordAndSalt = SecurityHelpers.GetHashedPasswordAndSalt(model.Password);
         
         var user = new AppUser()
@@ -67,7 +71,6 @@ public class SecurityController : ControllerBase
             new Claim(ClaimTypes.Name, "kalot"),
             new Claim(ClaimTypes.Role, "user"),
             new Claim(ClaimTypes.Role, "admin")
-            //Add additional data here
         };
 
         SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretKey"]));
@@ -93,7 +96,7 @@ public class SecurityController : ControllerBase
         });
     }
     
-    //[Authorize(AuthenticationSchemes = "IgnoreTokenExpirationScheme")]
+    [Authorize(AuthenticationSchemes = "IgnoreTokenExpirationScheme")]
     [HttpPost("refresh")]
     public IActionResult Refresh(RefreshTokenRequest refreshToken)
     {
@@ -113,7 +116,6 @@ public class SecurityController : ControllerBase
             new Claim(ClaimTypes.Name, "kalot"),
             new Claim(ClaimTypes.Role, "user"),
             new Claim(ClaimTypes.Role, "admin")
-            //Add additional data here
         };
 
         SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretKey"]));

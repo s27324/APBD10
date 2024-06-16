@@ -15,8 +15,6 @@ using WebApplication1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
@@ -38,12 +36,12 @@ builder.Services.AddAuthentication(options =>
 {
     opt.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = true,   //by who
-        ValidateAudience = true, //for whom
+        ValidateIssuer = true,
+        ValidateAudience = true,
         ValidateLifetime = true,
         ClockSkew = TimeSpan.FromMinutes(2),
-        ValidIssuer = "https://localhost:5001", //should come from configuration
-        ValidAudience = "https://localhost:5001", //should come from configuration
+        ValidIssuer = "https://localhost:5001",
+        ValidAudience = "https://localhost:5001",
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"]))
     };
 
@@ -62,12 +60,12 @@ builder.Services.AddAuthentication(options =>
 {
     opt.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = true,   //by who
-        ValidateAudience = true, //for whom
+        ValidateIssuer = true,
+        ValidateAudience = true,
         ValidateLifetime = false,
         ClockSkew = TimeSpan.FromMinutes(2),
-        ValidIssuer = "https://localhost:5001", //should come from configuration
-        ValidAudience = "https://localhost:5001", //should come from configuration
+        ValidIssuer = "https://localhost:5001",
+        ValidAudience = "https://localhost:5001",
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["SecretKey"]))
     };
 });
@@ -75,7 +73,6 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -89,9 +86,6 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
-//app.UseMiddleware<ErrorHandlingMiddleware>();
-//app.UseMiddleware<RequestLoggingMiddleware>();
-//app.UseMiddleware<BasicAuthMiddleware>();
 app.UseHttpsRedirection();
 app.MapControllers();
 

@@ -12,7 +12,7 @@ using WebApplication1.Entities;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    [Migration("20240602154700_Init")]
+    [Migration("20240616100332_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -244,6 +244,42 @@ namespace WebApplication1.Migrations
                             Details = "rutinoscorbin",
                             Dose = 3
                         });
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.AppUser", b =>
+                {
+                    b.Property<int>("IdUser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUser"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdUser");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("WebApplication1.Entities.Prescription", b =>

@@ -1,3 +1,5 @@
+using System;
+
 namespace WebApplication1.DTOs;
 
 public class GetClientMedicaments

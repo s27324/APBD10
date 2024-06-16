@@ -1,3 +1,6 @@
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.DTOs;
 using WebApplication1.Services;
@@ -6,6 +9,7 @@ namespace WebApplication1.Controller;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class HospitalController : ControllerBase
 {
     private readonly IHospitalService _hospitalService;
